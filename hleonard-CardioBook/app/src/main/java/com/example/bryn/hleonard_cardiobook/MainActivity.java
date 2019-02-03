@@ -5,13 +5,21 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+
+    private ArrayList<String> names = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentNewMeasurement = new Intent(MainActivity.this, MeasurementActivity.class);
                 startActivity(intentNewMeasurement);
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                        */
             }
 
         });
+
+        initsome();
+
     }
 
     @Override
@@ -54,5 +62,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initsome(){
+        names.add("test 56");
+        names.add("test 2");
+        names.add("yeye");
+        initRecyclerView();
+    }
+    private void initRecyclerView(){
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, names);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
