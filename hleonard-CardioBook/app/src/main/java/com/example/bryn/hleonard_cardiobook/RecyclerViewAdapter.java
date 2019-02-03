@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -21,11 +22,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<Measurement> measurements = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter( Context mContext, ArrayList<String> names) {
-        this.names = names;
+    public RecyclerViewAdapter( Context mContext, ArrayList<Measurement> measurements) {
+        this.measurements = measurements;
         this.mContext = mContext;
     }
 
@@ -40,17 +41,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: is called");
-        viewHolder.name.setText(names.get(i));
+        viewHolder.name.setText(measurements.get(i).getmID());
 
         //for changing screens
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked on" + names.get(i));
+                Log.d(TAG, "onClick: clicked on" + measurements.get(i).getTimeOnly());
 
                 Intent intent = new Intent(mContext, MeasurementActivity.class);
-                intent.putExtra("measurementParcel", new Measurement());
+                intent.putExtra("measurementParcel", measurements.get(i));
                 intent.putExtra("isNewMeasurement", false);
                 mContext.startActivity( intent);
 
@@ -60,7 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return names.size();
+        return measurements.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

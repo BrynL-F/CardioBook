@@ -1,5 +1,6 @@
 package com.example.bryn.hleonard_cardiobook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -13,11 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 
 public class MeasurementActivity extends AppCompatActivity {
     private Measurement measurement;
+    Context mContext = this;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -36,11 +45,14 @@ public class MeasurementActivity extends AppCompatActivity {
         saveMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent = new Intent(MeasurementActivity.this, MainActivity.class);
+                measurement.setSystolicPressure(1000);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("measurementParcel", measurement);
-                MeasurementActivity.this.startActivity( intent);
-                finish();
+                intent.putExtra("isNewMeasurement", false);
+                //setResult(MeasurementActivity.RESULT_OK,intent);
+                Toast.makeText(mContext, "Sys:" + measurement.getSystolicPressure(), Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+
             }
     });
     }
@@ -71,11 +83,20 @@ public class MeasurementActivity extends AppCompatActivity {
         EditText comment = findViewById(R.id.comment_value);
         date.setText(measurement.getDateOnly());
         time.setText(measurement.getTimeOnly());
+        Toast.makeText(mContext, Integer.toString(measurement.getSystolicPressure()), Toast.LENGTH_SHORT).show();
         systolic.setText(Integer.toString(measurement.getSystolicPressure()));
         diastolic.setText(Integer.toString(measurement.getDiastolicPressure()));
         heartrate.setText(Integer.toString(measurement.getHeartRate()));
-        comment.setText(measurement.getComment());
+        comment.setText(measurement.getmID());
 
     }
+
+    private void updateMeasurement(){
+        measurement.setDateTime(new Date());
+        measurement.setSystolicPressure(999);
+
+    }
+
+
 
 }

@@ -4,7 +4,10 @@ import android.icu.util.Measure;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.net.PasswordAuthentication;
+import java.security.PrivilegedActionException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
@@ -17,13 +20,13 @@ public class Measurement implements Parcelable {
     private Integer HeartRate;
     private String Comment;
     private Date dateTimeCreated;
-    private String mID;
+    private String mID = UUID.randomUUID().toString();
 
 
-    public Measurement(Parcel in){
-        String mID = in.readString();
-        String dateTimeCreatedString = in.readString();
-        String dateTimeString = in.readString();
+    public Measurement(Parcel in) throws ParseException {
+        mID = in.readString();
+        dateTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(in.readString());
+        dateTimeCreated = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(in.readString());
         SystolicPressure = in.readInt();
         DiastolicPressure = in.readInt();
         HeartRate = in.readInt();
@@ -31,7 +34,6 @@ public class Measurement implements Parcelable {
     }
 
     public Measurement() {
-        mID = UUID.randomUUID().toString();
         dateTimeCreated = new Date();
         dateTime = dateTimeCreated;
         SystolicPressure = 0;
@@ -39,8 +41,33 @@ public class Measurement implements Parcelable {
         HeartRate = 0;
         Comment = "";
     }
-/*
-    public Measurement(Date dateTime, Integer systolicPressure, Integer diastolicPressure, Integer heartRate, String comment, Date dateTimeCreated, String mID) {
+
+    public static Measurement readFromParcel(Parcel in){
+        String mID1 = in.readString();
+        Date dateTime1 = null;
+        try {
+            dateTime1 = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date dateTimeCreated1 = null;
+        try {
+            dateTimeCreated1 = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Integer SystolicPressure1 = in.readInt();
+        Integer DiastolicPressure1 = in.readInt();
+        Integer HeartRate1 = in.readInt();
+        String Comment1 = in.readString();
+        return new Measurement(dateTime1, SystolicPressure1, DiastolicPressure1,
+                HeartRate1, Comment1, dateTimeCreated1, mID1);
+    }
+
+
+
+    public Measurement(Date dateTime, Integer systolicPressure, Integer diastolicPressure,
+                       Integer heartRate, String comment, Date dateTimeCreated, String mID) {
         this.dateTime = dateTime;
         SystolicPressure = systolicPressure;
         DiastolicPressure = diastolicPressure;
@@ -49,7 +76,7 @@ public class Measurement implements Parcelable {
         this.dateTimeCreated = dateTimeCreated;
         this.mID = mID;
     }
-*/
+
     public Date getDateTime() {
         return dateTime;
     }
@@ -108,9 +135,9 @@ public class Measurement implements Parcelable {
     }
 
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator<Measurement> CREATOR = new Parcelable.Creator<Measurement>() {
         public Measurement createFromParcel(Parcel in) {
-            return new Measurement(in);
+            return readFromParcel(in);
         }
 
         public Measurement[] newArray(int size) {
@@ -121,10 +148,8 @@ public class Measurement implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        String dateTimeCreatedString;
-        String dateTimeString;
         dest.writeString(mID);
-        dest.writeString(this.dateTimeCreatedToString());
+        dest.writeString(this.dateTimeToString());
         dest.writeString(this.dateTimeToString());
         dest.writeInt(SystolicPressure);
         dest.writeInt(DiastolicPressure);
