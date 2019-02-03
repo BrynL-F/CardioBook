@@ -14,25 +14,12 @@ public class Measurement {
 
 
 
-    public Measurement(Date datetime, Integer systolicPressure, Integer diastolicPressure, Integer heartRate) {
+    public Measurement() {
         mID = UUID.randomUUID().toString();
         dateTimeCreated = new Date();
-        dateTime = datetime;
-        SystolicPressure = systolicPressure;
-        DiastolicPressure = diastolicPressure;
-        HeartRate = heartRate;
-        Comment = "";
+        dateTime = dateTimeCreated;
     }
 
-    public Measurement(Date datetime, Integer systolicPressure, Integer diastolicPressure, Integer heartRate, String comment) {
-        mID = UUID.randomUUID().toString();
-        dateTimeCreated = new Date();
-        dateTime = datetime;
-        SystolicPressure = systolicPressure;
-        DiastolicPressure = diastolicPressure;
-        HeartRate = heartRate;
-        Comment = comment;
-    }
 
     public Date getDateTime() {
         return dateTime;

@@ -1,6 +1,7 @@
 package com.example.bryn.hleonard_cardiobook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,8 +48,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked on" + names.get(i));
-                
-                Toast.makeText(mContext, names.get(i), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(mContext, MeasurementActivity.class);
+                intent.putExtra("MeasurementID", "testing?");
+                mContext.startActivity( intent);
+
             }
         });
     }
@@ -71,6 +75,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
     }
-
     
 }

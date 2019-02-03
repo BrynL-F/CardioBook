@@ -1,6 +1,7 @@
 package com.example.bryn.hleonard_cardiobook;
 
 import android.content.Intent;
+import android.icu.util.Measure;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
         addMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intentNewMeasurement = new Intent(MainActivity.this, MeasurementActivity.class);
+                intentNewMeasurement.putExtra("MeasurementID", "0");
                 startActivity(intentNewMeasurement);
             }
 
