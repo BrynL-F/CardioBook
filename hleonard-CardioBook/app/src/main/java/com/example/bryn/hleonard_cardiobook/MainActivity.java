@@ -31,13 +31,6 @@ public class MainActivity extends AppCompatActivity {
                         */
             }
 
-            /*
-                    switchButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ViewGoodTimes.class);
-                startActivity(intent);
-             */
         });
     }
 
