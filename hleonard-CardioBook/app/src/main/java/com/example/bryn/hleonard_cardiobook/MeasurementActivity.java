@@ -36,6 +36,10 @@ public class MeasurementActivity extends AppCompatActivity {
         saveMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(MeasurementActivity.this, MainActivity.class);
+                intent.putExtra("measurementParcel", measurement);
+                MeasurementActivity.this.startActivity( intent);
                 finish();
             }
     });
@@ -65,6 +69,8 @@ public class MeasurementActivity extends AppCompatActivity {
         EditText diastolic = findViewById(R.id.diastolic_value);
         EditText heartrate = findViewById(R.id.heart_rate_value);
         EditText comment = findViewById(R.id.comment_value);
+        date.setText(measurement.getDateOnly());
+        time.setText(measurement.getTimeOnly());
         systolic.setText(Integer.toString(measurement.getSystolicPressure()));
         diastolic.setText(Integer.toString(measurement.getDiastolicPressure()));
         heartrate.setText(Integer.toString(measurement.getHeartRate()));

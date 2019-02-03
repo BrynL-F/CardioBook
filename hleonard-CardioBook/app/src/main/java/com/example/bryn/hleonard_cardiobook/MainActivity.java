@@ -12,14 +12,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-
+    private static final String FILENAME = "file.sav";
     private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<Measurement> measurements = new ArrayList<>();
+    RecyclerViewAdapter adapter;
 
 
     @Override
@@ -34,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MeasurementActivity.class);
-                intent.putExtra("measurementParcel", new Measurement());
+                Measurement newMeasurement = new Measurement();
+                measurements.add(newMeasurement);
+                Toast.makeText(MainActivity.this, "New measurement created", Toast.LENGTH_SHORT).show();
+                intent.putExtra("measurementParcel", newMeasurement);
                 intent.putExtra("IsNewMeasurement", true);
                 startActivity(intent);
             }
@@ -44,6 +61,33 @@ public class MainActivity extends AppCompatActivity {
         initsome();
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadMeasurementsFromFile();
+    }
+
+
+    //Used TA code here
+    private Measurement[] loadMeasurementsFromFile() {
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            Type listType = new TypeToken<ArrayList<Measurement>>() {}.getType();
+            measurements = gson.fromJson(in, listType);
+
+        } catch (FileNotFoundException e) {
+            measurements = new ArrayList<Measurement>();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return measurements.toArray(new Measurement[measurements.size()]);
+    }
+    
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,8 +119,17 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, names);
+        adapter = new RecyclerViewAdapter(this, names);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void getIncomingIntents(){
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            Measurement measurement = (Measurement) b.getParcelable("measurementParcel");
+
+        }
     }
 }

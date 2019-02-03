@@ -134,14 +134,26 @@ public class Measurement implements Parcelable {
 
     private String dateTimeCreatedToString(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        return dateFormat.format(dateTimeCreated);
+        //return dateFormat.format(dateTimeCreated);
+        return "2018-09-09 12:00:00";
     }
 
     private String dateTimeToString(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        return dateFormat.format(dateTime);
+        //return dateFormat.format(dateTime);
+        return "2018-09-09 12:00:00";
     }
 
+    public String getDateOnly(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        return "2018-09-09";
+        //return dateFormat.format(dateTime);
+    }
 
+    public String getTimeOnly(){
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        return "12:00:00";
+        //return dateFormat.format(dateTime);
+    }
 
 }
