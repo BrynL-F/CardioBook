@@ -10,10 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Date;
+
 public class MeasurementActivity extends AppCompatActivity {
+    private Measurement measurement;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -27,7 +32,6 @@ public class MeasurementActivity extends AppCompatActivity {
         getIncomingIntents();
         getSupportActionBar().setTitle("CardioBook Measurement");
 
-
         Button saveMeasurementButton = (Button) findViewById(R.id.save_measurement);
         saveMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,16 +42,34 @@ public class MeasurementActivity extends AppCompatActivity {
     }
 
     private void getIncomingIntents(){
-        
-        //checking for extras
-        if(getIntent().hasExtra("name")){
-            String name = getIntent().getStringExtra("name");
-            setName(name);
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            measurement = (Measurement) b.getParcelable("measurementParcel");
+            if(!b.getBoolean("IsNewMeasurement")){
+                fillFields();
+            }
+            else{
+                EditText comment = findViewById(R.id.comment_value);
+                comment.setText("New!");
+            }
         }
     }
 
-    private void setName(String name){
-        TextView comment = findViewById(R.id.comment_value);
-        comment.setText(name);
+    private void fillFields(){
+        //date = measurement.getDateTime();
+        //time = measurement.getDateTime();
+        TextView date = findViewById(R.id.date_value);
+        TextView time = findViewById(R.id.time_value);
+        EditText systolic = findViewById(R.id.systolic_value);
+        EditText diastolic = findViewById(R.id.diastolic_value);
+        EditText heartrate = findViewById(R.id.heart_rate_value);
+        EditText comment = findViewById(R.id.comment_value);
+        systolic.setText(Integer.toString(measurement.getSystolicPressure()));
+        diastolic.setText(Integer.toString(measurement.getDiastolicPressure()));
+        heartrate.setText(Integer.toString(measurement.getHeartRate()));
+        comment.setText(measurement.getComment());
+
     }
+
 }

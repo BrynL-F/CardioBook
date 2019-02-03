@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         addMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intentNewMeasurement = new Intent(MainActivity.this, MeasurementActivity.class);
-                intentNewMeasurement.putExtra("MeasurementID", "0");
-                startActivity(intentNewMeasurement);
+                Intent intent = new Intent(MainActivity.this, MeasurementActivity.class);
+                intent.putExtra("measurementParcel", new Measurement());
+                intent.putExtra("IsNewMeasurement", true);
+                startActivity(intent);
             }
 
         });

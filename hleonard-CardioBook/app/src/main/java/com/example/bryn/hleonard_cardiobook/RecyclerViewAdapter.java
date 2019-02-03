@@ -50,7 +50,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Log.d(TAG, "onClick: clicked on" + names.get(i));
 
                 Intent intent = new Intent(mContext, MeasurementActivity.class);
-                intent.putExtra("MeasurementID", "testing?");
+                intent.putExtra("measurementParcel", new Measurement());
+                intent.putExtra("isNewMeasurement", false);
                 mContext.startActivity( intent);
 
             }
