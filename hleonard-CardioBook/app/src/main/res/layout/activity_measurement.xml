@@ -19,18 +19,6 @@
         android:textSize="14dp"
         android:textColor="@color/colorBlack"/>
 
-    <TextView
-        android:id="@+id/date_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".25"
-        app:layout_constraintStart_toEndOf="@id/date_text"
-        android:text=""
-        android:textSize="14dp"
-        android:textColor="@color/colorLightGrey"/>
-
     <Button
         android:id="@+id/date_button"
         android:layout_width="0dp"
@@ -39,7 +27,7 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".25"
+        app:layout_constraintWidth_percent=".5"
         android:text="Alter Date"
         android:textSize="12dp"/>
 
@@ -55,19 +43,6 @@
         android:textSize="14dp"
         android:textColor="@color/colorDarkGrey" />
 
-    <TextView
-        android:id="@+id/time_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".25"
-        app:layout_constraintTop_toBottomOf="@id/date_button"
-        app:layout_constraintStart_toEndOf="@id/time_text"
-        android:text=""
-        android:textSize="14dp"
-        android:textColor="@color/colorLightGrey"/>
-
     <Button
         android:id="@+id/time_button"
         android:layout_width="0dp"
@@ -76,7 +51,7 @@
         app:layout_constraintWidth_default="percent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_button"
-        app:layout_constraintWidth_percent=".25"
+        app:layout_constraintWidth_percent=".5"
         android:text="Alter Time"
         android:textSize="12dp"/>
 
