@@ -14,6 +14,14 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.UUID;
 
+/**
+ * Measurement class represents a measurement (old or new). It implements the interface Parcelable
+ * in order to transfer/send it across activiities. When initially created, the date and time is
+ * sent to the current date, while a unique identifier is also created. All other fields are
+ * provided through the setters.
+ * This class includes an inner class in order to satisfy the parcelable interface. The methods
+ * readFromParcel and writeToParcel are also implemented heere to satisfy interface requirements.
+ */
 public class Measurement implements Parcelable {
     private String date;
     private String time;
@@ -24,6 +32,9 @@ public class Measurement implements Parcelable {
     private String mID = UUID.randomUUID().toString();
 
 
+    /**
+     * Consructor for parcel sharing
+     */
     public Measurement(Parcel in) throws ParseException {
         mID = in.readString();
         date = in.readString();
@@ -33,6 +44,9 @@ public class Measurement implements Parcelable {
         Comment = in.readString();
     }
 
+    /**
+     * Basic constructor
+     */
     public Measurement() {
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
         date = dateFormat.format(new Date());
@@ -44,6 +58,12 @@ public class Measurement implements Parcelable {
         Comment = "";
     }
 
+
+    /**
+     * readFromParcel collects the parcel information and returns the converted Measurement.
+     * @param in
+     * @return
+     */
     public static Measurement readFromParcel(Parcel in){
         String mID1 = in.readString();
         String Date1 = in.readString();
@@ -58,6 +78,17 @@ public class Measurement implements Parcelable {
 
 
 
+
+    /**
+     * Constructor used for readFromParcel method
+     * @param date
+     * @param time
+     * @param systolicPressure
+     * @param diastolicPressure
+     * @param heartRate
+     * @param comment
+     * @param mID
+     */
     public Measurement(String  date, String time, Integer systolicPressure, Integer diastolicPressure,
                        Integer heartRate, String comment, String mID) {
         this.date = date;
@@ -70,70 +101,150 @@ public class Measurement implements Parcelable {
     }
 
 
+    /**
+     * Getter for the dTate field
+     * @return date
+     */
     public String getDate(){ return this.date; }
 
+    /**
+     * Setter for the date
+     * @param dateString
+     */
     public void setDate(String dateString) {
         this.date = dateString;
     }
 
+    /**
+     * Getter for the Time field
+     * @return time
+     */
     public String getTime(){ return this.time; }
 
+    /**
+     * Setter for the Time field
+     * @param timeString
+     */
     public void setTime(String timeString) {
         this.time = timeString;
     }
+
+    /**
+     * Getter for the SystolicPressure fjeld
+     * @return SystolicPressure
+     */
 
     public Integer getSystolicPressure() {
         return SystolicPressure;
     }
 
+    /**
+     * Setter for the SystolicPressure field
+     * @param systolicPressure
+     */
     public void setSystolicPressure(Integer systolicPressure) {
         SystolicPressure = systolicPressure;
     }
+
+    /**
+     * Getter for the DiastolicPressure field
+     * @return Diasolic Pressure
+     */
 
     public Integer getDiastolicPressure() {
         return DiastolicPressure;
     }
 
+    /**
+     * Setter for the DiasolicPressure field
+     * @param diastolicPressure
+     */
     public void setDiastolicPressure(Integer diastolicPressure) {
         DiastolicPressure = diastolicPressure;
     }
 
+    /**
+     * Getter for the HeartRate field
+     * @return HeartRate
+     */
     public Integer getHeartRate() {
         return HeartRate;
     }
 
+    /**
+     * Setter for the HeartRate feild
+     * @param heartRate
+     */
     public void setHeartRate(Integer heartRate) {
         HeartRate = heartRate;
     }
 
+    /**
+     * Getter for the Comment field
+     * @return Comment
+     */
     public String getComment() {
         return Comment;
     }
 
+    /**
+     * Setter for the Comment filed
+     * @param comment
+     */
     public void setComment(String comment) {
         Comment = comment;
     }
 
+    /**
+     * Getter for mID field
+     * @return mID
+     */
     public String getmID() {
         return mID;
     }
 
+
+    /**
+     * Necessary for Parceable implementation
+     * @return size
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
 
+    /**
+     * Inner class that creates a pareceable parcel for the measurement
+     */
     public static final Parcelable.Creator<Measurement> CREATOR = new Parcelable.Creator<Measurement>() {
+
+        /**
+         * Creates a measurement from the parcel
+         * @param in
+         * @return measurement from parcel
+         */
         public Measurement createFromParcel(Parcel in) {
             return readFromParcel(in);
         }
+
+        /**
+         * Creates an array of Masurements of a certain size
+         * @param size
+         * @return the array of measurements
+         */
         public Measurement[] newArray(int size) {
             return new Measurement[size];
         }
     };
 
 
+    /**
+     * This method is part of the implementation of Parceable. It writese the Meaurement data fields
+     * to the parcel
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mID);

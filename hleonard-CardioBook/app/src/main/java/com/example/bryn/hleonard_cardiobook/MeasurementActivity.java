@@ -32,17 +32,29 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * The MeasurementActivity class manages the screen when opening a measurement. This includes when
+ * adding a new measurement, or editing or viewing an old measurement. The measurement is passed
+ * into the MeasurementActivity and passed back to the MainActivity using a parcel. This is managed
+ * through getIncomingIntents and the save button. This class sets activity_measurement elements
+ * from the Measurement parcel, and checks input on save. A datepicker and timepicker are used to
+ * enhance the user experience as they select a date.
+ */
 public class MeasurementActivity extends AppCompatActivity {
     private Measurement measurement;
-    Context mContext = this;
-    TextView date;
-    TextView time;
-    EditText systolic;
-    EditText diastolic;
-    EditText heartRate;
-    EditText comment;
+    private Context mContext = this;
+    private TextView date;
+    private TextView time;
+    private EditText systolic;
+    private EditText diastolic;
+    private EditText heartRate;
+    private EditText comment;
 
-
+    /**
+     * Sets up the activity for getting incoming parcles and the onClickListeners for the date,time,
+     * and save buttons.
+     * @param savedInstanceState
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +67,10 @@ public class MeasurementActivity extends AppCompatActivity {
         getIncomingIntents();
         getSupportActionBar().setTitle("CardioBook Measurement");
 
+        /**
+         * Sets the action for the save button click. If the field input is acceptable, it sends
+         * back to main the updated measurement parcel.
+         */
         Button saveMeasurementButton = (Button) findViewById(R.id.save_measurement);
         saveMeasurementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,12 +83,19 @@ public class MeasurementActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(mContext, "Input fields are incorrect. Please retry.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Input fields are incorrect. Please retry.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
-    });
+        });
 
-
+        /**
+         * This datepicker is a widget used to enhance user experience when selecting a date.
+         * This pulls the date from the measurement object and sets the datepicker date to this date.
+         * It sets the button text to the selected or default (pulled) date.
+         * Note that this was based off of a datetimepicker from a joint personal project named
+         * myTimes by myself and Tymoore Jamal.
+         */
         final Button dateButton = findViewById(R.id.date_button);
         dateButton.setOnClickListener(new View.OnClickListener(){
 
@@ -90,13 +113,13 @@ public class MeasurementActivity extends AppCompatActivity {
                 int day = datecalendar.get(Calendar.DAY_OF_MONTH);
                 int month = datecalendar.get(Calendar.MONTH);
                 int year = datecalendar.get(Calendar.YEAR);
-                Toast.makeText(mContext, "TEH DATE IS " + measurement.getDate() , Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, "TEH DATE IS " + day + year , Toast.LENGTH_SHORT).show();
-                DatePickerDialog datepicker = new DatePickerDialog( mContext, new DatePickerDialog.OnDateSetListener() {
+
+                DatePickerDialog datepicker = new DatePickerDialog( mContext,
+                        new DatePickerDialog.OnDateSetListener() {
 
                     @Override
                     public void onDateSet(DatePicker datepicker, int mYear, int mMonth, int mDay){
-                        dateButton.setText(mYear + "-" + (mMonth + 1) + "-" + mDay);
+                        dateButton.setText(mYear + "-" + String.format("%02d",(mMonth + 1)) + "-" + mDay);
                     }
 
                 }, year, month, day);
@@ -106,7 +129,13 @@ public class MeasurementActivity extends AppCompatActivity {
 
         });
 
-
+        /**
+         * This timeicker is a widget used to enhance user experience when selecting a date.
+         * This pulls the time from the measurement object and sets the timepicker time to this time.
+         * It sets the button text to the selected or default (pulled) time.
+         * Note that this was based off of a datetimepicker from a joint personal project named
+         * myTimes by myself and Tymoore Jamal.
+         */
         final Button timeButton = findViewById(R.id.time_button);
         timeButton.setOnClickListener(new View.OnClickListener(){
 
@@ -126,7 +155,8 @@ public class MeasurementActivity extends AppCompatActivity {
                 int hour = datecalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = datecalendar.get(Calendar.MINUTE);
 
-                TimePickerDialog timepicker = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timepicker = new TimePickerDialog(mContext,
+                        new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker timePicker, int mhour, int mminute) {
@@ -141,19 +171,23 @@ public class MeasurementActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method catches the incoming Measurement parcels that are sent via intents.
+     */
     private void getIncomingIntents(){
 
         Bundle b = getIntent().getExtras();
         if(b!=null){
             measurement = b.getParcelable("measurementParcel");
-            if(!b.getBoolean("IsNewMeasurement")){
                 initMeasurementFields();
-            }
-            else{
-                initMeasurementFields();
-            }
         }
+
     }
+
+    /**
+     * This method takes the measurement fields and sets them to the elements in the
+     * activity_measurement.xml file to display them.
+     */
 
     private void initMeasurementFields(){
         date = findViewById(R.id.date_button);
@@ -172,6 +206,10 @@ public class MeasurementActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method updates the measurement fields for measurement from the
+     * elements in the activity_measurement.xml file
+     */
     private void updateMeasurementFields(){
         measurement.setDate(date.getText().toString());
         measurement.setTime(time.getText().toString());
@@ -182,16 +220,25 @@ public class MeasurementActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Checks to make sure that the input for the date, time, pressures, heartrate, and comment
+     * fields are in the correct format.
+     * @return boolean representing whether the input fields are correct
+     */
     private boolean checkMeasurementFields(){
 
+        //Pressures, date and heartRate are mandatory
         if (systolic.getText()==null || diastolic.getText()==null || heartRate.getText() ==null ||
                 date.getText()==null || time.getText()==null){
             return false;
         }
+        //pressures and heartrate must be positive integers
         else if (!isPositiveInteger(systolic.getText()) || !isPositiveInteger(diastolic.getText()) ||
                 !isPositiveInteger(heartRate.getText())){
             return false;
         }
+        //comment must be up to 20 characters.
         else if(comment.getText().length()>20){
             return false;
         }
@@ -201,7 +248,11 @@ public class MeasurementActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Takes in an EditText's value and determines whether it is a positive integer or not.
+     * @param editText
+     * @return boolean representing whether Edittable is positive integer
+     */
     private boolean isPositiveInteger(Editable editText){
         try {
             int integer = Integer.parseInt(editText.toString());
@@ -216,6 +267,9 @@ public class MeasurementActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Prevent user from escaping the measurement without saving
+     */
     @Override
     public void onBackPressed() {
         //do nothing
