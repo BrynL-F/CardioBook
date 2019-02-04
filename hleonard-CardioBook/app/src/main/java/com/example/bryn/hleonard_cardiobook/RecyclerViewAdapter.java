@@ -73,6 +73,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.heart_rate_display.setText(Integer.toString(measurements.get(i).getHeartRate()));
 
 
+
+
+
         viewHolder.warning.setVisibility(HeartValuesOutOfBound(measurements.get(i)));
 
         /**
@@ -93,7 +96,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        //ImageButton delete_button = getItemViewType()
+        viewHolder.delete_button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                measurements.remove(i);
+                notifyDataSetChanged();
+            }
+        });
+
+
+
     }
 
     /**
@@ -132,6 +145,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         }
+
+
     }
 
     /**

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private static final String FILENAME = "file1.sav";
+    private static final String FILENAME = "File5.sav";
     private ArrayList<Measurement> measurements = new ArrayList<>();
     private RecyclerViewAdapter adapter;
     private RecyclerView oldMeasurementsList;
