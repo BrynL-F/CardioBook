@@ -18,8 +18,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.Text;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
@@ -30,16 +36,19 @@ import java.util.ArrayList;
  * the list.
  *
  * Note that this was made with help from the CodingWithMitch tutorial videos at
- * https://www.youtube.com/watch?v=ZXoGG2XTjzU and https://www.youtube.com/watch?v=Vyqz_-sJGFk
+ * https://www.youtube.com/watch?v=ZXoGG2XTjzU and https://www.youtube.com/watch?v=Vyqz_-sJGFk which
+ * were published Jan1, 2018 and Jan2, 2018 respectively.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
     private ArrayList<Measurement> measurements = new ArrayList<>();
     private Context mContext;
+    private static String FILENAME;
 
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<Measurement> measurements) {
+    public RecyclerViewAdapter(Context mContext, ArrayList<Measurement> measurements, String filename) {
+        this.FILENAME = filename;
         this.measurements = measurements;
         this.mContext = mContext;
     }
@@ -73,9 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.heart_rate_display.setText(Integer.toString(measurements.get(i).getHeartRate()));
 
 
-
-
-
+        //warning flag image for heart values out of bounds
         viewHolder.warning.setVisibility(HeartValuesOutOfBound(measurements.get(i)));
 
         /**
@@ -96,12 +103,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        /**
+         * For deleting measurement
+         */
         viewHolder.delete_button.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 measurements.remove(i);
                 notifyDataSetChanged();
+                saveInFile();
             }
         });
 
@@ -166,6 +177,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return View.GONE;
         }
 
+    }
+
+
+    /**
+     * This method is based on the TA's lonelyTwitter app. This method takes the measurements list
+     * and streams it into the prespecified file using GSON.
+     */
+    private void saveInFile() {
+        try {
+            FileOutputStream fos = mContext.openFileOutput(FILENAME, 0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(measurements, writer);
+            writer.flush();
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

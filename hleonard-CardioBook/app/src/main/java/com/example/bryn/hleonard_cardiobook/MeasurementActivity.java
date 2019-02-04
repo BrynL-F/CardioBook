@@ -94,7 +94,7 @@ public class MeasurementActivity extends AppCompatActivity {
          * This pulls the date from the measurement object and sets the datepicker date to this date.
          * It sets the button text to the selected or default (pulled) date.
          * Note that this was based off of a datetimepicker from a joint personal project named
-         * myTimes by myself and Tymoore Jamal.
+         * myTimes by myself and Ty Jamal.
          */
         final Button dateButton = findViewById(R.id.date_button);
         dateButton.setOnClickListener(new View.OnClickListener(){
@@ -108,8 +108,6 @@ public class MeasurementActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(mContext, date1.toString(), Toast.LENGTH_SHORT).show();
-                datecalendar.setTime(date1);
                 int day = datecalendar.get(Calendar.DAY_OF_MONTH);
                 int month = datecalendar.get(Calendar.MONTH);
                 int year = datecalendar.get(Calendar.YEAR);
@@ -134,7 +132,7 @@ public class MeasurementActivity extends AppCompatActivity {
          * This pulls the time from the measurement object and sets the timepicker time to this time.
          * It sets the button text to the selected or default (pulled) time.
          * Note that this was based off of a datetimepicker from a joint personal project named
-         * myTimes by myself and Tymoore Jamal.
+         * myTimes by myself and Ty Jamal.
          */
         final Button timeButton = findViewById(R.id.time_button);
         timeButton.setOnClickListener(new View.OnClickListener(){
@@ -188,7 +186,6 @@ public class MeasurementActivity extends AppCompatActivity {
      * This method takes the measurement fields and sets them to the elements in the
      * activity_measurement.xml file to display them.
      */
-
     private void initMeasurementFields(){
         date = findViewById(R.id.date_button);
         time = findViewById(R.id.time_button);

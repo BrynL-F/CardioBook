@@ -40,12 +40,12 @@ import java.util.ArrayList;
  * MainActivity writes to and pulls from a file. It uses a recycler view to display the list.
  * When navigating to a new activity (the measurement activity), the main activity provides a
  * measurement in the form of a parcel either through the recyclerview or on a button press.
- * a
+ *
  */
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private static final String FILENAME = "File5.sav";
+    private static final String FILENAME = "StorageFile.sav";
     private ArrayList<Measurement> measurements = new ArrayList<>();
     private RecyclerViewAdapter adapter;
     private RecyclerView oldMeasurementsList;
@@ -140,13 +140,12 @@ public class MainActivity extends AppCompatActivity {
      * Note that this recyclerview function as well as some of the RecyclerViewAdapter.java is
      * based off of CodingWithMitch's video RecyclerView
      * (https://www.youtube.com/watch?v=Vyqz_-sJGFk) and RecyclerView onClickListener to
-     * New Activity (https://www.youtube.com/watch?v=ZXoGG2XTjzU)
+     * New Activity (https://www.youtube.com/watch?v=ZXoGG2XTjzU) which were published Jan1 and
+     * Jan2, 2108 respectively
      */
-
     private void initRecyclerView(){
-
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        adapter = new RecyclerViewAdapter(this, measurements);
+        adapter = new RecyclerViewAdapter(this, measurements, FILENAME);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
